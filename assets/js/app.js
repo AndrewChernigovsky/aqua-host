@@ -75,6 +75,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
         swiper: galleryThumbs
       }
     });
+    var input = document.querySelector("#phone");
+    window.intlTelInput(input, {
+      singleDialCode: true,
+      allowDropdown: true,
+      separateDialCode: true,
+      utilsScript: "components/utils.js",
+      initialCountry: "auto",
+      geoIpLookup: function geoIpLookup(success, failure) {
+        $.get("https://ipinfo.io", function () {}, "jsonp").always(function (resp) {
+          var countryCode = resp && resp.country ? resp.country : "kg";
+          success(countryCode);
+        });
+      }
+    });
   });
 })(jQuery);
 
