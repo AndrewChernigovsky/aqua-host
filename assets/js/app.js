@@ -389,7 +389,7 @@ var swiperSlider = function () {
     loop: true,
     centeredSlides: true,
     autoplay: {
-      delay: 5000,
+      delay: 500000,
       disableOnInteraction: false
     },
     preloadImages: false,
