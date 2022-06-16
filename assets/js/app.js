@@ -19,13 +19,13 @@ var _scrollSmooth = _interopRequireDefault(require("./components/scroll-smooth")
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-// You can write a call and import your functions in this file.
-//
-// This file will be compiled into app.js and will not be minified.
-// Feel free with using ES6 here.
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 (function ($) {
   // When DOM is ready
   $(function () {
+    var _window$intlTelInput;
+
     //const accordions = new Accordion();
     $.fancybox.open($('.gallery'));
 
@@ -76,18 +76,29 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
       }
     });
     var input = document.querySelector("#phone");
-    window.intlTelInput(input, {
+    var inputHidden = document.querySelector("#phoneHidden");
+    var form = document.getElementsByTagName("form");
+    var iti = window.intlTelInput(input, (_window$intlTelInput = {
       singleDialCode: true,
       allowDropdown: true,
       separateDialCode: true,
-      utilsScript: "components/utils.js",
-      initialCountry: "auto",
-      geoIpLookup: function geoIpLookup(success, failure) {
-        $.get("https://ipinfo.io", function () {}, "jsonp").always(function (resp) {
-          var countryCode = resp && resp.country ? resp.country : "kg";
-          success(countryCode);
-        });
-      }
+      formatOnDisplay: true,
+      hiddenInput: "full",
+      preferredCountries: ["kg", "ru", "kz"],
+      utilsScript: "utils.js"
+    }, _defineProperty(_window$intlTelInput, "utilsScript", "https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.3/build/js/utils.js"), _defineProperty(_window$intlTelInput, "initialCountry", "auto"), _defineProperty(_window$intlTelInput, "nationalMode", true), _defineProperty(_window$intlTelInput, "autoPlaceholder", true), _defineProperty(_window$intlTelInput, "autoFormat", true), _defineProperty(_window$intlTelInput, "geoIpLookup", function geoIpLookup(success, failure) {
+      $.get("https://ipinfo.io", function () {}, "jsonp").always(function (resp) {
+        var countryCode = resp && resp.country ? resp.country : "kg";
+        success(countryCode);
+      });
+    }), _window$intlTelInput));
+    form.addEventListener('submit', function () {
+      input.value = input.intlTelInput("getNumber");
+    });
+    $('#menuFormCall').click(function () {
+      $('body').removeClass('overflow');
+      $('nav').removeClass('active');
+      $('.js-burger-open').removeClass('active');
     });
   });
 })(jQuery);
@@ -389,7 +400,7 @@ var swiperSlider = function () {
     loop: true,
     centeredSlides: true,
     autoplay: {
-      delay: 500000,
+      delay: 5000,
       disableOnInteraction: false
     },
     preloadImages: false,
@@ -406,19 +417,7 @@ var swiperSlider = function () {
     },
     observer: true,
     observeSlideChildren: true,
-    observeParents: true // on: {
-    //   slideChange(swiper) {
-    //     const slides = swiper.slides;
-    //     const activeSlideIndex = swiper.activeIndex;
-    //     const activeSlideNode = slides[activeSlideIndex];
-    //     const videoSrc = activeSlideNode.dataset.videoSrc;
-    //     const bindedTextSliders = Array.from(document.querySelectorAll(".swiper-main__slide"));
-    //     const foundText = bindedTextSliders.find(video => video.dataset.aciveSlider === videoSrc);
-    //     bindedTextSliders.forEach(video => video.removeAttribute("src"));
-    //     foundText.attr("src");
-    //   }
-    // }
-
+    observeParents: true
   });
 
   var init = function init() {};
@@ -500,6 +499,10 @@ var swiperSliderQuality = function () {
       type: 'bullets',
       clickable: true
     },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev'
+    },
     breakpoints: {
       1024: {
         slidesPerView: 4
@@ -539,7 +542,7 @@ var swiperSliderStock = function () {
     loop: true,
     centeredSlides: true,
     autoplay: {
-      delay: 10000,
+      delay: 15000,
       disableOnInteraction: false
     },
     preloadImages: false,
